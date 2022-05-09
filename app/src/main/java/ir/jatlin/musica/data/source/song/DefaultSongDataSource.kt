@@ -3,9 +3,9 @@ package ir.jatlin.musica.data.source.song
 import ir.jatlin.musica.common.media.MediaProvider
 import ir.jatlin.musica.data.model.Song
 
-class DefaultLocalSongDataSource(
+class DefaultSongDataSource(
     private val songProvider: MediaProvider<List<Song>>
-) : LocalSongDataSource {
+) : SongDataSource {
 
 
     override suspend fun fetchSongList(): List<Song> {
