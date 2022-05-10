@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
-     fun getAllSongs(): Flow<Resource<List<Song>>>
+     suspend fun getAllSongs(): List<Song>
 }
