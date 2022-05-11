@@ -7,11 +7,15 @@ import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.provider.MediaStore
 import androidx.compose.ui.graphics.asImageBitmap
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.jatlin.musica.common.map
 import ir.jatlin.musica.data.model.Song
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class AudioProvider(private val context: Context) : MediaProvider<List<Song>> {
+class AudioProvider @Inject constructor(
+    @ApplicationContext private val context: Context
+) : MediaProvider<List<@kotlin.jvm.JvmSuppressWildcards Song>> {
 
     private val projection = arrayOf(
         MediaStore.Audio.Media._ID,
