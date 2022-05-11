@@ -21,6 +21,7 @@ class AudioProvider @Inject constructor(
         MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.TITLE,
         MediaStore.Audio.Media.ARTIST,
+        MediaStore.Audio.Media.ALBUM,
         MediaStore.Audio.Media.DURATION
     )
 
@@ -53,9 +54,10 @@ class AudioProvider @Inject constructor(
         val idColumn = cursor.getColumnIndexOrThrow(projection[0])
         val nameColumn = cursor.getColumnIndexOrThrow(projection[1])
         val artistColumn = cursor.getColumnIndexOrThrow(projection[2])
-        val durationColumn = cursor.getColumnIndexOrThrow(projection[3])
+        val albumColumn = cursor.getColumnIndexOrThrow(projection[3])
+        val durationColumn = cursor.getColumnIndexOrThrow(projection[4])
 
-        return ColumnsIndex(idColumn, nameColumn, artistColumn, durationColumn)
+        return ColumnsIndex(idColumn, nameColumn, artistColumn, albumColumn, durationColumn)
 
     }
 
@@ -66,6 +68,7 @@ class AudioProvider @Inject constructor(
         )
         val name = getString(indices.name)
         val artist = getString(indices.artist)
+        val album = getString(indices.album)
         val duration = getInt(indices.duration)
 
         val mmRetriever = MediaMetadataRetriever()
@@ -88,6 +91,7 @@ class AudioProvider @Inject constructor(
                 uri = uri,
                 name = name,
                 artist = artist,
+                album = album,
                 duration = duration,
                 photo = photo
             )
@@ -101,6 +105,7 @@ class AudioProvider @Inject constructor(
         val id: Int,
         val name: Int,
         val artist: Int,
+        val album: Int,
         val duration: Int
     )
 }
