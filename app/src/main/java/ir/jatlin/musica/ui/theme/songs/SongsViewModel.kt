@@ -2,6 +2,7 @@ package ir.jatlin.musica.ui.theme.songs
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.jatlin.musica.common.Resource
 import ir.jatlin.musica.data.model.Song
 import ir.jatlin.musica.domain.GetAllSongsUseCase
@@ -9,8 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SongsViewModel(
+@HiltViewModel
+class SongsViewModel @Inject constructor(
     private val getAllSongs: GetAllSongsUseCase
 ) : ViewModel() {
 

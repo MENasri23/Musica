@@ -2,9 +2,10 @@ package ir.jatlin.musica.data.source.song
 
 import ir.jatlin.musica.common.media.MediaProvider
 import ir.jatlin.musica.data.model.Song
+import javax.inject.Inject
 
-class DefaultSongDataSource(
-    private val songProvider: MediaProvider<List<Song>>
+class DefaultSongDataSource @Inject constructor(
+    private val songProvider: @JvmSuppressWildcards MediaProvider<List<Song>>
 ) : SongDataSource {
 
 
