@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
-abstract class FlowUserCase<P, R> {
+abstract class FlowUseCase<P, R> {
 
     operator fun invoke(params: P): Flow<Resource<R>> = flow {
         emit(Resource.loading())

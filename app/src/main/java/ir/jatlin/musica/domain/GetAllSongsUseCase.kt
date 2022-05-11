@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class GetAllSongsUseCase @Inject constructor(
     private val songRepository: SongRepository
-) : FlowUserCase<Unit, List<Song>>() {
+) : FlowUseCase<Unit, List<Song>>() {
 
     override suspend fun execute(params: Unit): List<Song> {
         return songRepository.getAllSongs()
