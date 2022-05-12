@@ -41,8 +41,8 @@ class AudioProvider @Inject constructor(
             throw  IllegalArgumentException()
         }
 
-        val columnsIndex = getSongColumnsIndex(cursor = cursor)
         return cursor.use { c ->
+            val columnsIndex = getSongColumnsIndex(c)
             c.map { parseSong(it, columnsIndex) }
         }
     }
