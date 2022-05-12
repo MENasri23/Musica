@@ -64,7 +64,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
     // Material design icons
-//    implementation("androidx.compose.material:material-icons-extended:$compose_version")
+    //    implementation("androidx.compose.material:material-icons-extended:$compose_version")
     implementation("androidx.compose.material:material-icons-core:$compose_version")
 
     // hilt navigation compose
@@ -75,6 +75,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-compiler:$hilt_version")
     kapt("androidx.hilt:hilt-compiler:$hilt_compiler")
+
+    // debug
+    implementation("com.jakewharton.timber:timber:$timber_version")
 
     testImplementation('junit:junit:4.13.2')
     androidTestImplementation('androidx.test.ext:junit:1.1.3')
