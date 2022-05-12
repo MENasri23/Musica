@@ -3,14 +3,12 @@ package ir.jatlin.musica.common.media
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.provider.MediaStore
-import androidx.compose.ui.graphics.asImageBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.jatlin.musica.common.map
+import ir.jatlin.musica.data.model.Album
 import ir.jatlin.musica.data.model.Song
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class AudioProvider @Inject constructor(
@@ -22,6 +20,7 @@ class AudioProvider @Inject constructor(
         MediaStore.Audio.Media.TITLE,
         MediaStore.Audio.Media.ARTIST,
         MediaStore.Audio.Media.ALBUM,
+        MediaStore.Audio.Media.ALBUM_ID,
         MediaStore.Audio.Media.DURATION
     )
 
@@ -37,75 +36,76 @@ class AudioProvider @Inject constructor(
 
 
     @Throws()
-    override fun get(): List<Song> {
+    override suspend fun get(): List<Song> {
         if (cursor == null) {
             throw  IllegalArgumentException()
         }
 
         val columnsIndex = getSongColumnsIndex(cursor = cursor)
-        val songs = cursor.map { parseSong(it, columnsIndex) }
-
-        cursor.close()
-
-        return songs
+        return cursor.use { c ->
+            c.map { parseSong(it, columnsIndex) }
+        }
     }
 
     private fun getSongColumnsIndex(cursor: Cursor): ColumnsIndex {
         val idColumn = cursor.getColumnIndexOrThrow(projection[0])
-        val nameColumn = cursor.getColumnIndexOrThrow(projection[1])
+        val songNameColumn = cursor.getColumnIndexOrThrow(projection[1])
         val artistColumn = cursor.getColumnIndexOrThrow(projection[2])
-        val albumColumn = cursor.getColumnIndexOrThrow(projection[3])
-        val durationColumn = cursor.getColumnIndexOrThrow(projection[4])
+        val albumNameColumn = cursor.getColumnIndexOrThrow(projection[3])
+        val albumIdColumn = cursor.getColumnIndexOrThrow(projection[4])
+        val durationColumn = cursor.getColumnIndexOrThrow(projection[5])
 
-        return ColumnsIndex(idColumn, nameColumn, artistColumn, albumColumn, durationColumn)
+        return ColumnsIndex(
+            id = idColumn,
+            SongName = songNameColumn,
+            artist = artistColumn,
+            albumName = albumNameColumn,
+            albumId = durationColumn,
+            duration = albumIdColumn
+        )
 
     }
 
-    private fun parseSong(c: Cursor, indices: ColumnsIndex): Song? = c.run {
-        val uri = ContentUris.withAppendedId(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            c.getLong(indices.id)
-        )
-        val name = getString(indices.name)
-        val artist = getString(indices.artist)
-        val album = getString(indices.album)
-        val duration = getInt(indices.duration)
+    private fun parseSong(c: Cursor, indices: ColumnsIndex): Song =
+        c.run {
+            val albumId = getLong(indices.albumId)
+            val albumName = getString(indices.albumName)
+            val albumImageUrl = getAlbumImageUrl(albumId)
+            val album = Album(albumId, albumName, albumImageUrl)
 
-        val mmRetriever = MediaMetadataRetriever()
-        val bitmapOptions = BitmapFactory.Options()
-
-        try {
-            mmRetriever.setDataSource(context.applicationContext, uri)
-            val photoByteArray = mmRetriever.embeddedPicture
-
-            val photo = photoByteArray?.let { photo ->
-                BitmapFactory.decodeByteArray(
-                    photo,
-                    0,
-                    photo.size,
-                    bitmapOptions
-                ).asImageBitmap()
-            }
+            val name = getString(indices.SongName)
+            val artist = getString(indices.artist)
+            val songUri = getSongUri(getLong(indices.id))
+            val duration = getInt(indices.duration)
 
             Song(
-                uri = uri,
+                uri = songUri,
                 name = name,
                 artist = artist,
                 album = album,
-                duration = duration,
-                photo = photo
+                duration = duration
             )
-        } catch (e: RuntimeException) {
-            null
         }
+
+    private fun getSongUri(songId: Long) =
+        ContentUris.withAppendedId(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId
+        )
+
+    private fun getAlbumImageUrl(albumId: Long) =
+        ContentUris.withAppendedId(Uri.parse(ALBUM_ART_URI), albumId)
+
+    companion object {
+        private const val ALBUM_ART_URI = "content://media/external/audio/albumart"
     }
 
 
     class ColumnsIndex(
         val id: Int,
-        val name: Int,
+        val SongName: Int,
         val artist: Int,
-        val album: Int,
+        val albumName: Int,
+        val albumId: Int,
         val duration: Int
     )
 }
