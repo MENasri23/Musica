@@ -1,7 +1,6 @@
 package ir.jatlin.musica.data.model
 
 import android.net.Uri
-import androidx.compose.ui.graphics.ImageBitmap
 
 
 data class Song(
@@ -10,5 +9,4 @@ data class Song(
     val artist: String,
     val album: Album,
     val duration: Int,
-    val photo: ImageBitmap? = null
 )
