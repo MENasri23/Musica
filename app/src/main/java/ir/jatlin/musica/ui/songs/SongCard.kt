@@ -6,10 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,13 +33,14 @@ import ir.jatlin.musica.ui.theme.Shapes
 @Composable
 fun SongCard(
     song: Song,
+    hasDivider: Boolean,
     modifier: Modifier = Modifier,
-    onCLicked: (songUri: Uri) -> Unit = {}
+    onCLicked: (songUrl: String) -> Unit = {}
 ) {
 
     Card(modifier = modifier
         .wrapContentHeight()
-        .clickable { onCLicked(song.uri) }
+        .clickable { onCLicked(song.uri.toString()) }
         .alpha(0.87f)
     ) {
         Row(
@@ -80,6 +78,7 @@ fun SongCard(
                 )
                 Spacer(modifier = Modifier.padding(top = 4.dp))
                 Text(text = song.artist)
+                Divider(Modifier.fillMaxWidth())
             }
 
         }
@@ -106,7 +105,8 @@ private fun SongCardPreview() {
                     ),
                     duration = 3600,
                 ),
-                modifier = Modifier.padding(4.dp)
+                modifier = Modifier.padding(4.dp),
+                hasDivider = true
             )
 
         }
