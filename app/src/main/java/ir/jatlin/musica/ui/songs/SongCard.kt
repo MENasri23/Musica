@@ -1,11 +1,11 @@
-package ir.jatlin.musica.ui
+package ir.jatlin.musica.ui.songs
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -46,8 +45,9 @@ fun SongCard(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
+                .height(IntrinsicSize.Max)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .background(Color.LightGray) // TODO: Remove this line after composing layout
+//                .background(Color.LightGray) // TODO: Remove this line after composing layout
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -65,25 +65,39 @@ fun SongCard(
 
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
+            Box(
+                Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
                     .padding(start = 16.dp)
             ) {
-                Text(
-                    text = song.name,
-                    style = MaterialTheme.typography.h6,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-                Spacer(modifier = Modifier.padding(top = 4.dp))
-                Text(text = song.artist)
-                Divider(Modifier.fillMaxWidth())
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                ) {
+                    Text(
+                        text = song.name,
+                        style = MaterialTheme.typography.h6,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.padding(top = 4.dp))
+                    Text(text = song.artist)
+
+                }
+                if (hasDivider) {
+                    Spacer(modifier = Modifier.padding(top = 8.dp))
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    )
+                }
             }
-
         }
-    }
 
+    }
 }
 
 
@@ -97,7 +111,7 @@ private fun SongCardPreview() {
                 song = Song(
                     uri = "imageUril".toUri(),
                     name = "Just a Heads Up!What's up",
-                    artist = "Maher Zhene",
+                    artist = "Maher Zain",
                     album = Album(
                         id = 1,
                         name = "Learning English",

@@ -11,8 +11,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ir.jatlin.musica.common.Resource
 import ir.jatlin.musica.data.model.Song
-import ir.jatlin.musica.ui.SongCard
+import ir.jatlin.musica.ui.theme.MusicaTheme
 import ir.jatlin.musica.ui.theme.songs.SongsViewModel
+import ir.jatlin.musica.util.MusicData
 import timber.log.Timber
 
 @Composable
@@ -67,5 +68,7 @@ private fun SongsContent(
 @Preview
 @Composable
 fun SongsPreview() {
-
+    MusicaTheme {
+        SongsContent(songsList = MusicData.songs, navigateToPlayer = { })
+    }
 }
