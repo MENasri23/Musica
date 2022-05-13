@@ -56,6 +56,8 @@ dependencies {
 
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
     implementation("androidx.compose.foundation:foundation:$compose_version")
+    // constraint layout compose
+    implementation("androidx.constraintlayout:constraintlayout-compose:$compose_constraint_layout_version")
 
 
     // Animations

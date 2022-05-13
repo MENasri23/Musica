@@ -2,24 +2,26 @@ package ir.jatlin.musica.ui.songs
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -37,67 +39,84 @@ fun SongCard(
     onCLicked: (songUrl: String) -> Unit = {}
 ) {
 
-    Card(modifier = modifier
-        .wrapContentHeight()
+    ConstraintLayout(modifier = modifier
+        .fillMaxWidth()
         .clickable { onCLicked(song.uri.toString()) }
-        .alpha(0.87f)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+
+        val (image, songContent, overflow, divider) = createRefs()
+
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(song.uri)
+                .crossfade(true)
+                .placeholder(R.drawable.loading_animation)
+                .build(),
+            error = painterResource(id = R.drawable.ic_launcher_foreground),
+            contentScale = ContentScale.Crop,
+            contentDescription = null,
             modifier = Modifier
-                .height(IntrinsicSize.Max)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-//                .background(Color.LightGray) // TODO: Remove this line after composing layout
+                .size(dimensionResource(id = R.dimen.music_size))
+                .clip(Shapes.small)
+                .background(Color.DarkGray)
+                .constrainAs(image) {
+                    start.linkTo(parent.start)
+                    end.linkTo(songContent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+
+                }
+        )
+
+        Column(
+            modifier = Modifier
+                .constrainAs(songContent) {
+                    centerVerticallyTo(image)
+                    start.linkTo(image.end, margin = 16.dp)
+                    end.linkTo(overflow.start)
+                    width = Dimension.preferredWrapContent
+                }
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(song.uri)
-                    .crossfade(true)
-                    .placeholder(R.drawable.loading_animation)
-                    .build(),
-                error = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(dimensionResource(id = R.dimen.music_size))
-                    .clip(Shapes.small)
-                    .background(Color.DarkGray)
-
+            Text(
+                text = song.name,
+                style = MaterialTheme.typography.h6,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
+            Spacer(modifier = Modifier.padding(top = 4.dp))
+            Text(text = song.artist)
 
-            Box(
-                Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .padding(start = 16.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
-                ) {
-                    Text(
-                        text = song.name,
-                        style = MaterialTheme.typography.h6,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
-                    Spacer(modifier = Modifier.padding(top = 4.dp))
-                    Text(text = song.artist)
+        }
 
-                }
-                if (hasDivider) {
-                    Spacer(modifier = Modifier.padding(top = 8.dp))
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.BottomCenter)
-                    )
-                }
+        IconButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.constrainAs(overflow) {
+                start.linkTo(songContent.end)
+                end.linkTo(parent.end, margin = 4.dp)
+                centerVerticallyTo(songContent)
             }
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = stringResource(id = R.string.more)
+            )
+        }
+
+        if (hasDivider) {
+            Divider(
+                modifier = Modifier.constrainAs(divider) {
+                    top.linkTo(image.bottom, margin = 8.dp)
+                    start.linkTo(songContent.start)
+                    end.linkTo(songContent.end)
+
+                    width = Dimension.fillToConstraints
+                }
+            )
         }
 
     }
+
+
 }
 
 
@@ -110,7 +129,7 @@ private fun SongCardPreview() {
             SongCard(
                 song = Song(
                     uri = "imageUril".toUri(),
-                    name = "Just a Heads Up!What's up",
+                    name = "Just a Heads Up!What's up Hello How ",
                     artist = "Maher Zain",
                     album = Album(
                         id = 1,
