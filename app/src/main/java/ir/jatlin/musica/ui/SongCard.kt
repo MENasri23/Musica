@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -35,19 +36,19 @@ import ir.jatlin.musica.ui.theme.Shapes
 @Composable
 fun SongCard(
     song: Song,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCLicked: (songUri: Uri) -> Unit = {}
 ) {
 
     Card(modifier = modifier
         .wrapContentHeight()
-        .clickable { /* TODO */ }
+        .clickable { onCLicked(song.uri) }
         .alpha(0.87f)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clip(Shapes.small)
                 .background(Color.LightGray) // TODO: Remove this line after composing layout
         ) {
             AsyncImage(
@@ -61,7 +62,9 @@ fun SongCard(
                 contentDescription = null,
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.music_size))
+                    .clip(Shapes.small)
                     .background(Color.DarkGray)
+
             )
 
             Column(
