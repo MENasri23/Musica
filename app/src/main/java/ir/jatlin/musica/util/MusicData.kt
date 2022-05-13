@@ -94,5 +94,15 @@ object MusicData {
         duration = 4200,
     )
 
+    val songs = listOf(
+        song1,
+        song2,
+        song3,
+        song4,
+        song5,
+        song6,
+        song7,
+    )
+
 
 }

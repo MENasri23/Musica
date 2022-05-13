@@ -37,7 +37,9 @@ class MainActivity : ComponentActivity() {
                     ) {
 
                         composable("songs") {
-                            Songs(songsViewModel = hiltViewModel())
+                            Songs(songsViewModel = hiltViewModel()) { songUri ->
+
+                            }
                         }
 
                     }
