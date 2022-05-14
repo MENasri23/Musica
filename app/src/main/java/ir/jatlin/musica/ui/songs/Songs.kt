@@ -1,6 +1,5 @@
 package ir.jatlin.musica.ui.songs
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
@@ -8,7 +7,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import ir.jatlin.musica.common.Resource
 import ir.jatlin.musica.data.model.Song
 import ir.jatlin.musica.ui.theme.MusicaTheme
@@ -46,8 +44,7 @@ private fun SongsContent(
     navigateToPlayer: (songUri: String) -> Unit
 ) {
     LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = modifier
     ) {
         itemsIndexed(
             items = songsList,
@@ -57,7 +54,8 @@ private fun SongsContent(
             SongCard(
                 song = song,
                 hasDivider = index < songsList.lastIndex,
-                onCLicked = navigateToPlayer
+                onCLicked = navigateToPlayer,
+                modifier = Modifier.fillParentMaxWidth()
             )
         }
 
@@ -65,7 +63,7 @@ private fun SongsContent(
 }
 
 
-@Preview
+@Preview()
 @Composable
 fun SongsPreview() {
     MusicaTheme {

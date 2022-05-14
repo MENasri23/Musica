@@ -39,9 +39,9 @@ fun SongCard(
     onCLicked: (songUrl: String) -> Unit = {}
 ) {
 
-    ConstraintLayout(modifier = modifier
-        .fillMaxWidth()
-        .clickable { onCLicked(song.uri.toString()) }
+    ConstraintLayout(
+        modifier = modifier
+            .clickable { onCLicked(song.uri.toString()) }
     ) {
 
         val (image, songContent, overflow, divider) = createRefs()
@@ -60,8 +60,7 @@ fun SongCard(
                 .clip(Shapes.small)
                 .background(Color.DarkGray)
                 .constrainAs(image) {
-                    start.linkTo(parent.start)
-                    end.linkTo(songContent.start)
+                    start.linkTo(parent.start, margin = 16.dp)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
 
@@ -72,9 +71,13 @@ fun SongCard(
             modifier = Modifier
                 .constrainAs(songContent) {
                     centerVerticallyTo(image)
-                    start.linkTo(image.end, margin = 16.dp)
-                    end.linkTo(overflow.start)
-                    width = Dimension.preferredWrapContent
+                    linkTo(
+                        start = image.end,
+                        end = overflow.start,
+                        startMargin = 16.dp,
+                        endMargin = 4.dp,
+                    )
+                    width = Dimension.fillToConstraints
                 }
         ) {
             Text(
@@ -91,8 +94,7 @@ fun SongCard(
         IconButton(
             onClick = { /*TODO*/ },
             modifier = Modifier.constrainAs(overflow) {
-                start.linkTo(songContent.end)
-                end.linkTo(parent.end, margin = 4.dp)
+                end.linkTo(parent.end, margin = 8.dp)
                 centerVerticallyTo(songContent)
             }
         ) {
@@ -107,9 +109,10 @@ fun SongCard(
                 modifier = Modifier.constrainAs(divider) {
                     top.linkTo(image.bottom, margin = 8.dp)
                     start.linkTo(songContent.start)
-                    end.linkTo(songContent.end)
+                    end.linkTo(parent.end, margin = 4.dp)
 
                     width = Dimension.fillToConstraints
+
                 }
             )
         }

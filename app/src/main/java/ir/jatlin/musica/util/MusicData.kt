@@ -46,7 +46,7 @@ object MusicData {
 
     val song4 = Song(
         uri = "https://picsum.photos/id/1000/5626/3635".toUri(),
-        name = "Just a Heads Up!What's up",
+        name = "Just a Heads Up!",
         artist = "Lukas Budimaier",
         album = Album(
             id = 1,
@@ -59,7 +59,7 @@ object MusicData {
 
     val song5 = Song(
         uri = "https://picsum.photos/id/1012/3973/2639".toUri(),
-        name = "Just a Heads Up!What's up",
+        name = "Just ",
         artist = "Scott Webb",
         album = Album(
             id = 1,
@@ -71,7 +71,7 @@ object MusicData {
 
     val song6 = Song(
         uri = "https://picsum.photos/id/1013/4256/2832".toUri(),
-        name = "Just a Heads Up!What's up",
+        name = "Just a Heads Up!What's upfwfw wfwf",
         artist = "Cayton Heath",
         album = Album(
             id = 1,
